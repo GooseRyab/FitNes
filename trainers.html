@@ -1,49 +1,441 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тренеры FitNes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FitNes – Тренеры</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="fitnesstyle.css">
     <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f9fafc}.container{max-width:1280px;margin:0 auto;padding:0 24px}.header{background:#0b1a2e;color:white;padding:20px 0}.header .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}.nav ul{display:flex;gap:28px;list-style:none;flex-wrap:wrap}.nav a{color:#eef2ff;text-decoration:none}.nav a.active,.nav a:hover{color:#ffb74d}.section{padding:60px 0}.section-title{font-size:2rem;text-align:center;margin-bottom:48px}.trainer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}.trainer-card{background:white;border-radius:28px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);text-align:center}.trainer-card img{width:100%;height:280px;object-fit:cover;background:#ccc}.trainer-card h3{margin:20px 0 8px}.trainer-card p{padding:0 16px 20px;color:#4a5568}footer{background:#0b1a2e;color:#b9c8e8;text-align:center;padding:32px 0;margin-top:20px}
-</style></head>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка */
+        .header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background-color: rgba(255, 255, 255, 0.96);
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 24px;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0f172a;
+        }
+        .logo span {
+            color: #f97316;
+        }
+        .logo p {
+            font-size: 0.75rem;
+            color: #475569;
+        }
+        .nav ul {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav a:hover, .nav a.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f97316;
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            margin: 24px 0 16px;
+            font-size: 0.9rem;
+        }
+        .breadcrumb a {
+            color: #f97316;
+            text-decoration: none;
+        }
+
+        /* Секция тренеров */
+        .section {
+            padding: 40px 0 70px;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .section-title span {
+            color: #f97316;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Сетка тренеров */
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 32px;
+        }
+        .trainer-card {
+            background: white;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: 0.2s;
+            border: 1px solid #f1f5f9;
+            text-align: center;
+        }
+        .trainer-card:hover {
+            transform: translateY(-5px);
+            border-color: #fed7aa;
+            box-shadow: 0 20px 30px -12px rgba(249,115,22,0.15);
+        }
+        .trainer-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+        .trainer-info {
+            padding: 24px 20px 30px;
+        }
+        .trainer-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .trainer-specialty {
+            color: #f97316;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: inline-block;
+            background: #fff0e6;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+        }
+        .trainer-exp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+        .trainer-exp i {
+            color: #f97316;
+        }
+        .trainer-bio {
+            color: #475569;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .btn-book-trainer {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-book-trainer:hover {
+            background: #ea580c;
+            transform: scale(1.02);
+        }
+
+        /* Подвал */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .footer-col p, .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #1e293b;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+                transition: 0.3s;
+                z-index: 99;
+                padding: 30px 20px;
+            }
+            .nav.open {
+                left: 0;
+            }
+            .nav ul {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .trainers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>FitNes</h1>
-            </div>
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="schedule.html">Расписание</a></li>
-                    <li><a href="trainers.html" class="active">Тренеры</a></li>
-                    <li><a href="prices.html">Цены</a></li>
-                    <li><a href="booking.html">Запись</a></li>
-                    <li><a href="contact.html">Контакты</a></li>
-                    <li><a href="admin.html">Admin</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-<main class="container section"><h2 class="section-title">👨‍🏫 Наши профессиональные тренеры</h2><div class="trainer-grid" id="trainersList"></div></main>
-<footer>
+
+<header class="header">
     <div class="container">
-        <p>© 2026 FitNes — Р.К.Д. </p>
-        <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Пушкина, 12 | <i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+        <div class="logo">
+            <h1>Fit<span>Nes</span></h1>
+            <p>Твой идеальный ритм</p>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Меню"><i class="fas fa-bars"></i></button>
+        <nav class="nav" id="navMenu">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="schedule.html">Расписание</a></li>
+                <li><a href="trainers.html" class="active">Тренеры</a></li>
+                <li><a href="prices.html">Цены</a></li>
+                <li><a href="booking.html">Запись</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Главная</a> / <span>Наши тренеры</span>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Команда <span>профессионалов</span></h2>
+            <p class="section-subtitle">Опытные тренеры с международными сертификатами помогут вам достичь любых целей – от похудения до спортивных рекордов.</p>
+            
+            <div class="trainers-grid" id="trainersGrid">
+                <!-- Карточки тренеров будут добавлены через JS, но также можно и直接在 HTML, оставим гибкость -->
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>FitNes</h4>
+                <p>Фитнес-клуб нового поколения. Мы помогаем достигать целей и менять жизнь к лучшему.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Пушкина, 99</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> hello@fitnes.ru</p>
+            </div>
+            <div class="footer-col">
+                <h4>Режим работы</h4>
+                <p>Пн–Пт: 07:00 – 23:00</p>
+                <p>Сб–Вс: 08:00 – 22:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Быстрая запись</h4>
+                <p><a href="booking.html">Онлайн-запись</a></p>
+                <p><a href="prices.html">Абонементы</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2026 FitNes Фитнес-клуб. Все права защищены.</p>
+        </div>
     </div>
 </footer>
+
 <script>
-    const trainersData = [
-        { name:"Анна Смирнова", special:"Йога, Пилатес, Стретчинг", exp:"10 лет опыта", img:"https://placehold.co/400x300?text=Анна" },
-        { name:"Дмитрий Волков", special:"Кроссфит, функциональный тренинг", exp:"Мастер спорта", img:"https://placehold.co/400x300?text=Дмитрий" },
-        { name:"Елена Морозова", special:"Пилатес, реабилитация", exp:"Сертифицированный тренер", img:"https://placehold.co/400x300?text=Елена" },
-        { name:"Максим Кравцов", special:"Бокс, единоборства, силовая", exp:"КМС по боксу", img:"https://placehold.co/400x300?text=Максим" }
+    // Данные тренеров (можно дополнять)
+    const trainers = [
+        {
+            id: 1,
+            name: "Анна Смирнова",
+            specialty: "Йога, Пилатес, Стретчинг",
+            experience: "8 лет",
+            bio: "Сертифицированный инструктор по хатха-йоге. Поможет обрести гибкость, снять стресс и укрепить мышцы кора.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Анна",
+            icon: "fas fa-spa"
+        },
+        {
+            id: 2,
+            name: "Дмитрий Волков",
+            specialty: "Кроссфит, функциональный тренинг",
+            experience: "10 лет",
+            bio: "Мастер спорта по пауэрлифтингу. Специалист по развитию силы и выносливости. Автор эксклюзивных программ.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Дмитрий",
+            icon: "fas fa-dumbbell"
+        },
+        {
+            id: 3,
+            name: "Елена Морозова",
+            specialty: "Пилатес, реабилитация",
+            experience: "6 лет",
+            bio: "Клинический специалист по восстановлению после травм. Проводит индивидуальные и групповые занятия по пилатесу.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Елена",
+            icon: "fas fa-heartbeat"
+        },
+        {
+            id: 4,
+            name: "Максим Кравцов",
+            specialty: "Бокс, кикбоксинг",
+            experience: "12 лет",
+            bio: "КМС по боксу, тренер высшей категории. Обучает технике ударов, самообороне и развитию реакции.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Максим",
+            icon: "fas fa-fist-raised"
+        },
+        {
+            id: 5,
+            name: "Кристина Павлова",
+            specialty: "Zumba, танцы",
+            experience: "5 лет",
+            bio: "Энергичный хореограф, заряжает позитивом. Занятия подходят для любого уровня подготовки.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Кристина",
+            icon: "fas fa-music"
+        },
+        {
+            id: 6,
+            name: "Олег Иванов",
+            specialty: "Танцы, хип-хоп",
+            experience: "7 лет",
+            bio: "Призер всероссийских соревнований по уличным танцам. Преподает современную хореографию для взрослых.",
+            image: "https://placehold.co/400x300/f1f5f9/f97316?text=Олег",
+            icon: "fas fa-shoe-prints"
+        }
     ];
-    const container = document.getElementById('trainersList');
-    if(container) container.innerHTML = trainersData.map(t => `<div class="trainer-card"><img src="${t.img}" alt="${t.name}"><h3>${t.name}</h3><p>${t.special}</p><p><i class="fas fa-star"></i> ${t.exp}</p></div>`).join('');
+
+    // Функция рендера карточек
+    function renderTrainers() {
+        const container = document.getElementById('trainersGrid');
+        if (!container) return;
+
+        container.innerHTML = trainers.map(trainer => `
+            <div class="trainer-card">
+                <img class="trainer-image" src="${trainer.image}" alt="${trainer.name}">
+                <div class="trainer-info">
+                    <h3 class="trainer-name">${trainer.name}</h3>
+                    <div class="trainer-specialty">${trainer.specialty}</div>
+                    <div class="trainer-exp"><i class="fas fa-calendar-alt"></i> Опыт: ${trainer.experience}</div>
+                    <p class="trainer-bio">${trainer.bio}</p>
+                    <button class="btn-book-trainer" data-trainer="${trainer.name}">
+                        <i class="fas fa-calendar-check"></i> Запись на тренировку
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Добавляем обработчики для кнопок записи
+        document.querySelectorAll('.btn-book-trainer').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const trainerName = btn.getAttribute('data-trainer');
+                // Сохраняем в localStorage, что пользователь хочет записаться к конкретному тренеру
+                localStorage.setItem('prebooking', JSON.stringify({
+                    type: 'trainer',
+                    name: trainerName
+                }));
+                window.location.href = 'booking.html';
+            });
+        });
+    }
+
+    // Мобильное меню
+    function initMobileMenu() {
+        const toggleBtn = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (toggleBtn && navMenu) {
+            toggleBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('open');
+            });
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navMenu.classList.remove('open'));
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTrainers();
+        initMobileMenu();
+    });
 </script>
 </body>
 </html>
