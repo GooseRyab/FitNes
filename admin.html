@@ -3,38 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель администратора FitZone</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>FitNes - Панель администратора</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="fitnesstyle.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;background:#eef2f5}
-        .container{max-width:1200px;margin:0 auto;padding:30px 20px}
-        .admin-card{background:white;border-radius:32px;padding:28px;margin-bottom:32px;box-shadow:0 8px 20px rgba(0,0,0,0.05)}
-        h2{margin-bottom:20px;color:#0b1a2e}
-        table{width:100%;border-collapse:collapse}
-        th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}
-        .delete-btn{background:#dc2626;color:white;border:none;padding:6px 14px;border-radius:30px;cursor:pointer;font-size:0.8rem;margin:2px}
-        .delete-btn:hover{background:#b91c1c}
-        .login-overlay{max-width:400px;margin:80px auto;background:white;padding:32px;border-radius:32px;text-align:center;box-shadow:0 20px 30px rgba(0,0,0,0.1)}
-        .login-overlay input{padding:12px;width:100%;margin:16px 0;border-radius:40px;border:1px solid #ccc}
-        .login-overlay button{background:#ff6b3d;color:white;border:none;padding:12px;width:100%;border-radius:40px;font-weight:bold;cursor:pointer}
-        .badge-admin{background:#0b1a2e;color:white;padding:4px 12px;border-radius:20px;font-size:0.7rem;display:inline-block;margin-bottom:16px}
-        a{color:#ff6b3d;text-decoration:none}
-        hr{margin:20px 0}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2f5;
+            color: #1e1e2a;
+            padding: 30px 0;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .admin-header {
+            background: #0b1a2e;
+            color: white;
+            padding: 20px 0;
+            border-radius: 28px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .admin-card {
+            background: white;
+            border-radius: 28px;
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+        .admin-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #ff6b3d;
+            display: inline-block;
+        }
+        .admin-card h2 i {
+            color: #ff6b3d;
+            margin-right: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: #0b1a2e;
+        }
+        .delete-btn, .edit-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .edit-btn {
+            background: #3b82f6;
+            margin-right: 8px;
+        }
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+        .edit-btn:hover {
+            background: #2563eb;
+        }
+        .badge-empty {
+            background: #f1f5f9;
+            padding: 20px;
+            text-align: center;
+            border-radius: 20px;
+            color: #475569;
+        }
+        .btn-back {
+            display: inline-block;
+            background: #0b1a2e;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+        .btn-back:hover {
+            background: #ff6b3d;
+            transform: translateY(-2px);
+        }
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .login-box {
+            background: white;
+            max-width: 400px;
+            width: 90%;
+            padding: 36px;
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.2);
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin: 20px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 60px;
+            font-size: 1rem;
+        }
+        .login-box button {
+            background: #ff6b3d;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            th, td { font-size: 0.8rem; padding: 10px 6px; }
+            .admin-card { padding: 20px; }
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
-<div id="app-root"></div>
 
 <script>
-    // Функция для отрисовки админ-панели (вызывается после успешного входа)
-    function renderAdminPanel() {
-        // Получаем данные из localStorage
-        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-        let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-        let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
+    // ---- АВТОРИЗАЦИЯ АДМИНИСТРАТОРА ----
+    const ADMIN_PASSWORD = "admin123";  // пароль для входа
+
+    function checkAuth() {
+        let isLogged = sessionStorage.getItem('fitzone_admin_auth');
+        if (isLogged !== 'true') {
+            // Показываем форму входа
+            document.body.innerHTML = `
+                <div class="login-overlay">
+                    <div class="login-box">
+                        <i class="fas fa-shield-alt" style="font-size: 48px; color: #ff6b3d;"></i>
+                        <h2 style="margin: 20px 0 10px;">Вход в админ-панель</h2>
+                        <p style="color: #475569;">Введите пароль для доступа</p>
+                        <input type="password" id="adminPassword" placeholder="Пароль">
+                        <button id="loginBtn">Войти</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                const pwd = document.getElementById('adminPassword').value;
+                if (pwd === ADMIN_PASSWORD) {
+                    sessionStorage.setItem('fitzone_admin_auth', 'true');
+                    location.reload();  // перезагружаем страницу для отображения панели
+                } else {
+                    alert('Неверный пароль! Доступ запрещён.');
+                }
+            });
+            return false;
+        }
+        return true;
+    }
+
+    // Если авторизация не пройдена, код ниже не выполнится
+    if (!checkAuth()) {
+        // останавливаем выполнение, пока пользователь не войдет
+        throw new Error("Auth required");
+    }
+
+    // ---- ОСНОВНОЙ КОД АДМИН-ПАНЕЛИ (ВЫПОЛНЯЕТСЯ ТОЛЬКО ПОСЛЕ УСПЕШНОГО ВХОДА) ----
+    
+    // Функции для работы с данными
+    function getTrainings() {
+        return JSON.parse(localStorage.getItem('trainings')) || [];
+    }
+
+    function saveTrainings(data) {
+        localStorage.setItem('trainings', JSON.stringify(data));
+    }
+
+    function getBookings() {
+        return JSON.parse(localStorage.getItem('bookings')) || [];
+    }
+
+    function saveBookings(data) {
+        localStorage.setItem('bookings', JSON.stringify(data));
+    }
+
+    function getContacts() {
+        return JSON.parse(localStorage.getItem('contacts')) || [];
+    }
+
+    // Рендер всех разделов
+    function renderBookings() {
+        const bookings = getBookings();
+        const container = document.getElementById('bookingsList');
+        if (!container) return;
+        
+        if (bookings.length === 0) {
+            container.innerHTML = '<div class="badge-empty"><i class="fas fa-inbox"></i> Нет активных заявок</div>';
+            return;
+        }
+        
+        let html = `<tr>
+            <thead>
+                <tr><th>ID</th><th>Клиент</th><th>Занятие</th><th>Телефон</th><th>Email</th><th>Дата записи</th><th>Действие</th></tr>
+            </thead>
+            <tbody>
+        `;
+        bookings.forEach(booking => {
+            html += `
+                <tr>
+                    <td>${booking.id}</td>
+                    <td><strong>${escapeHtml(booking.clientName)}</strong></td>
+                    <td>${escapeHtml(booking.trainingName)}</td>
+                    <td>${escapeHtml(booking.phone)}</td>
+                    <td>${escapeHtml(booking.email || '—')}</td>
+                    <td>${escapeHtml(booking.date)}</td>
+                    <td><button class="delete-btn" onclick="deleteBooking(${booking.id})">Удалить</button></td>
+                </tr>
+            `;
+        });
+        html += '</tbody>';
+        container.innerHTML = html;
+    }
+
+    function deleteBooking(id) {
+        let bookings = getBookings();
+        bookings = bookings.filter(b => b.id !== id);
+        saveBookings(bookings);
+        renderBookings();
+    }
+    window.deleteBooking = deleteBooking;
+
+    function renderMessages() {
+        const messages = getContacts();
+        const container = document.getElementById('messagesList');
+        if (!container) return;
+        
+        if (messages.length === 0) {
+            container.innerHTML = '<div class="badge-empty"><i class="fas fa-envelope-open-text"></i> Нет сообщений от клиентов</div>';
+            return;
+        }
+        
+        let html = '<div style="display: flex; flex-direction: column; gap: 16px;">';
+        messages.forEach((msg, idx) => {
+            html += `
+                <div style="border: 1px solid #e2e8f0; border-radius: 20px; padding: 16px; background: #fafcff;">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px;">
+                        <strong><i class="fas fa-user"></i> ${escapeHtml(msg.name)}</strong>
+                        <span style="color: #64748b; font-size: 0.8rem;">${escapeHtml(msg.date)}</span>
+                    </div>
+                    <div><i class="fas fa-envelope"></i> ${escapeHtml(msg.email)}</div>
+                    <div style="margin-top: 12px; background: #f8fafc; padding: 12px; border-radius: 16px;">${escapeHtml(msg.message)}</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function renderTrainingsAdmin() {
+        const trainings = getTrainings();
+        const container = document.getElementById('trainingsManageList');
+        if (!container) return;
+        
+        if (trainings.length === 0) {
+            container.innerHTML = '<div class="badge-empty"><i class="fas fa-calendar-times"></i> Расписание пусто. Добавьте занятия через код или консоль.</div>';
+            return;
+        }
+        
+        let html = '<div style="display: flex; flex-direction: column; gap: 12px;">';
+        trainings.forEach(t => {
+            html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 14px 20px; border-radius: 60px; flex-wrap: wrap; gap: 12px;">
+                    <div><strong>${escapeHtml(t.day)} ${escapeHtml(t.time)}</strong> — ${escapeHtml(t.activity)}<br><span style="font-size: 0.8rem; color: #475569;">Тренер: ${escapeHtml(t.trainer)} | Мест: ${t.spots}</span></div>
+                    <div><button class="delete-btn" onclick="deleteTraining(${t.id})">Удалить занятие</button></div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function deleteTraining(id) {
+        let trainings = getTrainings();
+        trainings = trainings.filter(t => t.id !== id);
+        saveTrainings(trainings);
+        renderTrainingsAdmin();
+    }
+    window.deleteTraining = deleteTraining;
+
+    // Простая защита от XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Инициализация демо-данных, если их нет (чтобы админка не была пустой)
+    function initDemoData() {
+        if (!localStorage.getItem('trainings')) {
+            const defaultTrainings = [
+                { id: 1, day: "Понедельник", time: "09:00", activity: "Йога", trainer: "Анна Смирнова", spots: 12 },
+                { id: 2, day: "Понедельник", time: "18:00", activity: "CrossFit", trainer: "Дмитрий Волков", spots: 8 },
+                { id: 3, day: "Вторник", time: "10:00", activity: "Пилатес", trainer: "Елена Морозова", spots: 10 },
+                { id: 4, day: "Вторник", time: "19:00", activity: "Танцы", trainer: "Олег Иванов", spots: 15 },
+                { id: 5, day: "Среда", time: "12:00", activity: "Бокс", trainer: "Максим Кравцов", spots: 6 },
+                { id: 6, day: "Среда", time: "20:00", activity: "Zumba", trainer: "Кристина Павлова", spots: 20 },
+                { id: 7, day: "Четверг", time: "08:30", activity: "Стретчинг", trainer: "Анна Смирнова", spots: 14 },
+                { id: 8, day: "Пятница", time: "17:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 9 }
+            ];
+            localStorage.setItem('trainings', JSON.stringify(defaultTrainings));
+        }
+        if (!localStorage.getItem('bookings')) localStorage.setItem('bookings', JSON.stringify([]));
+        if (!localStorage.getItem('contacts')) localStorage.setItem('contacts', JSON.stringify([]));
+    }
+
+    // Запуск рендеринга после загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        initDemoData();
+        renderBookings();
+        renderMessages();
+        renderTrainingsAdmin();
+    });
+
+    // Выводим HTML-интерфейс админки
+    document.body.innerHTML = `
+        <div class="container">
+            <div class="admin-header">
+                <h1><i class="fas fa-crown"></i> FitZone — Панель администратора</h1>
+                <p>Управление заявками, сообщениями и расписанием</p>
+            </div>
+
+            <div class="admin-card">
+                <h2><i class="fas fa-calendar-check"></i> Записи клиентов</h2>
+                <div id="bookingsList" style="overflow-x: auto;"></div>
+            </div>
+
+            <div class="admin-card">
+                <h2><i class="fas fa-message"></i> Сообщения обратной связи</h2>
+                <div id="messagesList"></div>
+            </div>
+
+            <div class="admin-card">
+                <h2><i class="fas fa-dumbbell"></i> Управление расписанием (удаление занятий)</h2>
+                <p style="margin-bottom: 16px; color: #475569;">*Чтобы добавить новое занятие, используйте консоль разработчика или измените данные в localStorage.</p>
+                <div id="trainingsManageList"></div>
+                <button id="resetScheduleBtn" style="margin-top: 20px; background: #ff6b3d; border: none; padding: 10px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer;">Сбросить расписание (восстановить демо)</button>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Вернуться на сайт</a>
+                <button id="logoutBtn" class="btn-back" style="background: #475569; margin-left: 12px;"><i class="fas fa-sign-out-alt"></i> Выйти из админки</button>
+            </div>
+            <footer>
+                <p>Дипломный проект — Рябов Кирилл Денисович, Московский Международный Колледж, 2026</p>
+            </footer>
+        </div>
+    `;
+
+    // Функция сброса расписания
+    document.getElementById('resetScheduleBtn')?.addEventListener('click', () => {
+        const defaultTrainings = [
+            { id: 1, day: "Понедельник", time: "09:00", activity: "Йога", trainer: "Анна Смирнова", spots: 12 },
+            { id: 2, day: "Понедельник", time: "18:00", activity: "CrossFit", trainer: "Дмитрий Волков", spots: 8 },
+            { id: 3, day: "Вторник", time: "10:00", activity: "Пилатес", trainer: "Елена Морозова", spots: 10 },
+            { id: 4, day: "Вторник", time: "19:00", activity: "Танцы", trainer: "Олег Иванов", spots: 15 },
+            { id: 5, day: "Среда", time: "12:00", activity: "Бокс", trainer: "Максим Кравцов", spots: 6 },
+            { id: 6, day: "Среда", time: "20:00", activity: "Zumba", trainer: "Кристина Павлова", spots: 20 },
+            { id: 7, day: "Четверг", time: "08:30", activity: "Стретчинг", trainer: "Анна Смирнова", spots: 14 },
+            { id: 8, day: "Пятница", time: "17:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 9 }
+        ];
+        localStorage.setItem('trainings', JSON.stringify(defaultTrainings));
+        renderTrainingsAdmin();
+        alert('Расписание восстановлено до первоначального состояния.');
+    });
+
+    // Кнопка выхода
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        sessionStorage.removeItem('fitzone_admin_auth');
+        location.reload();
+    });
+</script>
+</body>
+</html>        let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
 
         const html = `
             <div class="container">
