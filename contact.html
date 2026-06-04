@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Контакты и обратная связь</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter;background:#f9fafc}.container{max-width:1200px;margin:0 auto;padding:30px 20px}.header{background:#0b1a2e;padding:20px 0}.nav ul{display:flex;gap:28px;list-style:none;justify-content:center}.nav a{color:white;text-decoration:none}.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}.info-block{background:white;border-radius:28px;padding:28px}.map-placeholder{background:#e2e8f0;height:250px;border-radius:28px;display:flex;align-items:center;justify-content:center}footer{background:#0b1a2e;color:#b9c8e8;text-align:center;padding:32px;margin-top:40px}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
+</style></head>
+<body><header class="header"><div class="container"><nav class="nav"><ul><li><a href="index.html">Главная</a></li><li><a href="schedule.html">Расписание</a></li><li><a href="trainers.html">Тренеры</a></li><li><a href="prices.html">Цены</a></li><li><a href="booking.html">Запись</a></li><li><a href="contact.html" class="active">Контакты</a></li><li><a href="admin.html">Admin</a></li></ul></nav></div></header>
+<main class="container"><h2 style="text-align:center">Свяжитесь с нами</h2><div class="contact-grid"><div class="info-block"><h3><i class="fas fa-location-dot"></i> Адрес</h3><p>г. Москва, ул. Спортивная, д.12, м. Спортивная</p><h3><i class="fas fa-phone"></i> Телефон</h3><p>+7 (495) 123-45-67</p><h3><i class="fas fa-clock"></i> Время работы</h3><p>Пн-Вс: 07:00 – 23:00</p><h3><i class="fas fa-envelope"></i> Email</h3><p>info@fitzone.ru</p></div><div class="info-block"><h3>📩 Форма обратной связи</h3><form id="feedbackForm"><div class="form-group"><input type="text" id="fbName" placeholder="Ваше имя" required></div><div class="form-group"><input type="email" id="fbEmail" placeholder="Email для ответа" required></div><div class="form-group"><textarea rows="4" id="fbMsg" placeholder="Ваше сообщение..." required></textarea></div><button type="submit" class="btn" style="background:#ff6b3d;color:white;border:none;padding:12px 28px;border-radius:40px;width:100%;font-weight:bold">Отправить</button></form><div id="fbResult"></div></div></div></main>
+<footer><div class="container"><p>FitZone — мы на связи ежедневно</p></div></footer>
+<script>
+    document.getElementById('feedbackForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('fbName').value;
+        const email = document.getElementById('fbEmail').value;
+        const msg = document.getElementById('fbMsg').value;
+        if(name && email && msg) {
+            const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+            contacts.push({ name, email, message: msg, date: new Date().toLocaleString() });
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+            document.getElementById('fbResult').innerHTML = '<div style="background:#d1e7dd;padding:12px;border-radius:20px;margin-top:16px;">Спасибо! Мы ответим вам в ближайшее время.</div>';
+            this.reset();
+        } else alert('Заполните все поля');
+    });
+</script>
+</body>
+</html>
