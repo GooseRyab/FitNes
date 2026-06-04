@@ -2,39 +2,586 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FitNes - Фитнес клуб | Главная</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="fitnesstyle.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>FitNes | Фитнес-клуб нового поколения</title>
+    <!-- Font Awesome 6 (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ----------------------------------------------------------------
+           CSS отдельно (полный стиль для FitNes)
+           Все стили вынесены в этот блок для чистоты и удобства
+        ---------------------------------------------------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e1e2f;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .logo, .nav-links a, .btn, .price {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: #ff3b4a;
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 20px rgba(255, 59, 74, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ff3b4a;
+            color: #ff3b4a;
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: #ff3b4a;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .btn:hover {
+            background: #e02e3c;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 59, 74, 0.35);
+        }
+
+        /* Header / Navbar */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(0px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ff3b4a, #ff8c42);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo span {
+            color: #ff3b4a;
+            background: none;
+            -webkit-background-clip: unset;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #2d2d3a;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .nav-links li a:hover, .nav-links li a.active {
+            color: #ff3b4a;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #1e1e2f;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(105deg, #fef5f0 0%, #ffffff 100%);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-grid {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .hero-content {
+            flex: 1;
+        }
+        .hero-badge {
+            background: rgba(255, 59, 74, 0.12);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: #ff3b4a;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .hero-content h1 {
+            font-size: 3.8rem;
+            line-height: 1.2;
+            font-weight: 800;
+            color: #0a0a1a;
+            margin-bottom: 20px;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #5a5a70;
+            max-width: 500px;
+            margin-bottom: 35px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 40px;
+            box-shadow: 0 35px 55px rgba(0,0,0,0.08);
+        }
+
+        /* Section titles */
+        section {
+            padding: 90px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            color: #15151f;
+        }
+        .section-sub {
+            text-align: center;
+            color: #6b6b84;
+            max-width: 680px;
+            margin: 0 auto 55px;
+            font-size: 1.1rem;
+        }
+
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 38px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 28px;
+            text-align: center;
+            transition: 0.25s ease;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f0f0f0;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: #ffe0e2;
+            box-shadow: 0 25px 40px rgba(255, 59, 74, 0.08);
+        }
+        .feature-icon {
+            font-size: 2.8rem;
+            color: #ff3b4a;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+
+        /* Classes grid */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        .class-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        .class-card:hover {
+            transform: scale(1.02);
+        }
+        .class-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        .class-card h3, .class-card p {
+            padding: 0 22px;
+        }
+        .class-card h3 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+        .class-card p {
+            color: #6b6b84;
+            margin: 10px 0 20px;
+        }
+        .class-tag {
+            display: inline-block;
+            margin: 0 22px 22px;
+            background: #ffeff0;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #ff3b4a;
+        }
+
+        /* Trainers grid */
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 40px;
+        }
+        .trainer-card {
+            background: #ffffff;
+            border-radius: 30px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            transition: 0.3s;
+            border: 1px solid #f2f2f2;
+        }
+        .trainer-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .trainer-card h3 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+        .trainer-role {
+            color: #ff3b4a;
+            font-weight: 500;
+            margin: 6px 0 16px;
+        }
+        .trainer-social i {
+            margin: 0 8px 20px;
+            font-size: 1.2rem;
+            color: #aaa;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .trainer-social i:hover { color: #ff3b4a; }
+
+        /* Pricing */
+        .pricing-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        .pricing-card {
+            background: white;
+            flex: 1;
+            min-width: 260px;
+            border-radius: 32px;
+            padding: 40px 25px;
+            text-align: center;
+            transition: 0.25s;
+            border: 1px solid #eee;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.02);
+        }
+        .pricing-card.popular {
+            border: 2px solid #ff3b4a;
+            background: #fffafb;
+            transform: scale(1.02);
+        }
+        .price {
+            font-size: 2.9rem;
+            font-weight: 800;
+            color: #1e1e2f;
+            margin: 20px 0;
+        }
+        .price small {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .pricing-card ul {
+            list-style: none;
+            margin: 30px 0;
+        }
+        .pricing-card li {
+            margin: 12px 0;
+            color: #5a5a70;
+        }
+
+        /* Testimonials */
+        .testimonials-slider {
+            display: flex;
+            gap: 35px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .testimonial {
+            background: #fefaf8;
+            border-radius: 32px;
+            padding: 35px;
+            max-width: 380px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.03);
+            border: 1px solid #fae9e5;
+        }
+        .stars {
+            color: #ffb83b;
+            margin-bottom: 18px;
+        }
+        .testimonial p {
+            font-style: italic;
+            color: #2d2d3a;
+            margin-bottom: 25px;
+        }
+        .testimonial h4 {
+            font-weight: 700;
+        }
+
+        /* Contact */
+        .contact-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 45px;
+            background: #fefbf9;
+            border-radius: 48px;
+            padding: 45px;
+        }
+        .contact-info {
+            flex: 1;
+        }
+        .contact-info i {
+            color: #ff3b4a;
+            margin-right: 15px;
+            width: 28px;
+        }
+        .contact-info p {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        .contact-form {
+            flex: 1;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: 1px solid #e2e2e8;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .input-group textarea {
+            border-radius: 28px;
+            resize: vertical;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #ff3b4a;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f0f17;
+            color: #b0b0c0;
+            padding: 50px 0 25px;
+            text-align: center;
+        }
+        .social-icons {
+            margin: 25px 0;
+        }
+        .social-icons a {
+            color: white;
+            background: #252536;
+            margin: 0 10px;
+            display: inline-block;
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            border-radius: 50%;
+            transition: 0.25s;
+        }
+        .social-icons a:hover {
+            background: #ff3b4a;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 980px) {
+            .hero-content h1 { font-size: 2.8rem; }
+            .section-title { font-size: 2rem; }
+            .navbar { padding: 15px 0; }
+            .nav-links {
+                position: fixed;
+                top: 75px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 75px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                gap: 35px;
+                transition: 0.3s;
+                box-shadow: 5px 0 20px rgba(0,0,0,0.05);
+                z-index: 999;
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .hamburger {
+                display: block;
+            }
+            .contact-wrap {
+                padding: 30px;
+            }
+        }
+        @media (max-width: 680px) {
+            .hero-grid { flex-direction: column-reverse; text-align: center; }
+            .hero-content p { max-width: 100%; }
+            .hero-buttons { justify-content: center; }
+            section { padding: 60px 0; }
+        }
+        .active-link {
+            color: #ff3b4a !important;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
-<header class="header">
+
+<header>
     <div class="container">
-        <div class="logo">
-            <h1>FitNes</h1>
-            <p>Москва | Твой идеальный ритм</p>
-        </div>
-        <nav class="nav">
-            <ul>
-                <li><a href="index.html" class="active">Главная</a></li>
-                <li><a href="schedule.html">Расписание</a></li>
-                <li><a href="trainers.html">Тренеры</a></li>
-                <li><a href="prices.html">Цены</a></li>
-                <li><a href="booking.html">Запись</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-                <li><a href="admin.html">Admin</a></li>
+        <div class="navbar">
+            <div class="logo">Fit<span>Nes</span></div>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link">Главная</a></li>
+                <li><a href="#about" class="nav-link">О нас</a></li>
+                <li><a href="#classes" class="nav-link">Тренировки</a></li>
+                <li><a href="#trainers" class="nav-link">Тренеры</a></li>
+                <li><a href="#pricing" class="nav-link">Абонементы</a></li>
+                <li><a href="#contact" class="nav-link">Контакты</a></li>
             </ul>
-        </nav>
+        </div>
     </div>
 </header>
 
 <main>
-    <section class="hero">
+    <!-- Hero section -->
+    <section id="home" class="hero">
         <div class="container">
-            <h2>Достигай целей с FitNes</h2>
-            <p>Современный фитнес-клуб в центре Москвы. Тренажерный зал, групповые программы, персональные тренировки и онлайн-запись 24/7.</p>
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge"><i class="fas fa-dumbbell"></i>  СТАНЬ ЛУЧШЕЙ ВЕРСИЕЙ СЕБЯ</div>
+                    <h1>Трансформация<br> начинается здесь</h1>
+                    <p>FitNes — современный фитнес-клуб с авторскими программами, топовыми тренерами и энергией, которая меняет привычки.</p>
+                    <div class="hero-buttons">
+                        <a href="#pricing" class="btn">Начать тренировку</a>
+                        <a href="#about" class="btn btn-outline">Узнать больше</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.pexels.com/photos/4162449/pexels-photo-4162449.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop" alt="Фитнес зал FitNes">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Features -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Почему FitNes?</h2>
+            <div class="section-sub">Современный подход, мотивация и технологии — всё для твоего прогресса</div>
+            <div class="features-grid">
+                <div class="feature-card"><div class="feature-icon"><i class="fas fa-heartbeat"></i></div><h3>Функциональный фитнес</h3><p>Инновационные тренировки на все группы мышц с высокой эффективностью.</p></div>
+                <div class="feature-card"><div class="feature-icon"><i class="fas fa-chalkboard-user"></i></div><h3>Pro-тренеры</h3><p>Сертифицированные специалисты с опытом от 5 лет, индивидуальный подход.</p></div>
+                <div class="feature-card"><div class="feature-icon"><i class="fas fa-calendar-alt"></i></div><h3>Гибкое расписание</h3><p>Утренние, дневные, вечерние классы + онлайн-запись 24/7.</p></div>
+                <div class="feature-card"><div class="feature-icon"><i class="fas fa-users"></i></div><h3>Сообщество</h3><p>Заряжайся энергией от единомышленников и участвуй в челленджах.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes -->
+    <section id="classes" style="background-color: #fefbf9;">
+        <div class="container">
+            <h2 class="section-title">Популярные направления</h2>
+            <div class="section-sub">Выбери свой стиль и добейся цели с удовольствием</div>
+            <div class="classes-grid">
+                <div class="class-card"><div class="class-img" style="background-image: url('https://images.pexels.com/photos/5052877/pexels-photo-5052877.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop');"></div><h3>HIIT</h3><p>Интенсивный интервальный жиросжигающий тренинг</p><div class="class-tag"><i class="far fa-clock"></i> 45 мин</div></div>
+                <div class="class-card"><div class="class-img" style="background-image: url('https://images.pexels.com/photos/4498362/pexels-photo-4498362.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop');"></div><h3>Yoga & Mind</h3><p>Гармония тела, гибкость и ментальное здоровье</p><div class="class-tag"><i class="far fa-clock"></i> 60 мин</div></div>
+                <div class="class-card"><div class="class-img" style="background-image: url('https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop');"></div><h3>Кроссфит</h3><p>Функциональный интенсив на силу и выносливость</p><div class="class-tag"><i class="far fa-clock"></i> 55 мин</div></div>
+                <div class="class-card"><div class="class-img" style="background-image: url('https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop');"></div><h3>Pilates</h3><p>Укрепление кора, осанка и контроль тела</p><div class="class-tag"><i class="far fa-clock"></i> 50 мин</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers -->
+    <section id="trainers">
+        <div class="container">
+            <h2 class="section-title">Элитные тренеры</h2>
+            <div class="section-sub">Профессионалы, которые приведут тебя к рекордам</div>
+            <div class="trainers-grid">
+                <div class="trainer-card"><img src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Тренер Анна"><h3>Анна Коваль</h3><div class="trainer-role">Эксперт по HIIT & функционалу</div><div class="trainer-social"><i class="fab fa-instagram"></i><i class="fab fa-telegram"></i></div></div>
+                <div class="trainer-card"><img src="https://images.pexels.com/photos/6455865/pexels-photo-6455865.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Тренер Дмитрий"><h3>Дмитрий Волков</h3><div class="trainer-role">Кроссфит, пауэрлифтинг</div><div class="trainer-social"><i class="fab fa-instagram"></i><i class="fab fa-telegram"></i></div></div>
+                <div class="trainer-card"><img src="https://images.pexels.com/photos/6456124/pexels-photo-6456124.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Тренер Елена"><h3>Елена Мороз</h3><div class="trainer-role">Пилатес, йога и восстановление</div>            <p>Современный фитнес-клуб в центре Москвы. Тренажерный зал, групповые программы, персональные тренировки и онлайн-запись 24/7.</p>
             <a href="booking.html" class="btn">Записаться онлайн</a>
         </div>
     </section>
