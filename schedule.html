@@ -2,52 +2,511 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitNes - Расписание занятий</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="fitnesstyle.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FitNes – Расписание занятий</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка (аналогично главной) */
+        .header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background-color: rgba(255, 255, 255, 0.96);
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 24px;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0f172a;
+        }
+        .logo span {
+            color: #f97316;
+        }
+        .logo p {
+            font-size: 0.75rem;
+            color: #475569;
+        }
+        .nav ul {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav a:hover, .nav a.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f97316;
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            margin: 24px 0 16px;
+            font-size: 0.9rem;
+        }
+        .breadcrumb a {
+            color: #f97316;
+            text-decoration: none;
+        }
+
+        /* Секция расписания */
+        .section {
+            padding: 40px 0 70px;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .section-title span {
+            color: #f97316;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 40px;
+        }
+
+        /* Панель фильтров */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .filter-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+        .filter-btn.active {
+            background: #f97316;
+            color: white;
+            box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+        }
+        .filter-btn:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        .trainer-filter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #e2e8f0;
+        }
+        .trainer-filter label {
+            font-weight: 500;
+        }
+        .trainer-filter select {
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-family: inherit;
+            font-weight: 500;
+            color: #f97316;
+            outline: none;
+        }
+
+        /* Таблица расписания */
+        .schedule-table-wrapper {
+            overflow-x: auto;
+            border-radius: 28px;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+        .schedule-table th {
+            background: #0f172a;
+            color: white;
+            padding: 16px 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: left;
+        }
+        .schedule-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .schedule-table tr:hover td {
+            background-color: #fefaf6;
+        }
+        .badge-time {
+            background: #fff0e6;
+            color: #f97316;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        .trainer-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .spots {
+            font-size: 0.85rem;
+            color: #2c7a4d;
+            background: #e6f7ec;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        .btn-book {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-book:hover {
+            background: #ea580c;
+            transform: translateY(-1px);
+        }
+
+        /* Пустое состояние */
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #64748b;
+        }
+
+        /* Подвал */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .footer-col p, .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #1e293b;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+                transition: 0.3s;
+                z-index: 99;
+                padding: 30px 20px;
+            }
+            .nav.open {
+                left: 0;
+            }
+            .nav ul {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-btn, .trainer-filter {
+                text-align: center;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
-<header class="header"><div class="container"><div class="logo"><h1>FitNes</h1><p>Москва | Твой идеальный ритм</p></div>
-<nav class="nav"><ul><li><a href="index.html">Главная</a></li><li><a href="schedule.html" class="active">Расписание</a></li><li><a href="trainers.html">Тренеры</a></li><li><a href="prices.html">Цены</a></li><li><a href="booking.html">Запись</a></li><li><a href="contact.html">Контакты</a></li><li><a href="admin.html">Admin</a></li></ul></nav></div></header>
 
-<main class="container section">
-    <h2 class="section-title">🗓️ Расписание групповых занятий</h2>
-    <div class="filter-bar">
-        <select id="dayFilter"><option value="">Все дни</option><option>Понедельник</option><option>Вторник</option><option>Среда</option><option>Четверг</option><option>Пятница</option></select>
-        <input type="text" id="trainerFilter" placeholder="Фильтр по тренеру">
-    </div>
-    <div class="table-wrapper">
-        <table id="fullSchedule"><thead><tr><th>День</th><th>Время</th><th>Занятие</th><th>Тренер</th><th>Места</th><th></th></tr></thead><tbody></tbody></table>
-    </div>
-</main>
-<footer>
+<header class="header">
     <div class="container">
-        <p>© 2026 FitNes — Р.К.Д. </p>
-        <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Пушкина, 12 | <i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+        <div class="logo">
+            <h1>Fit<span>Nes</span></h1>
+            <p>Твой идеальный ритм</p>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Меню"><i class="fas fa-bars"></i></button>
+        <nav class="nav" id="navMenu">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="schedule.html" class="active">Расписание</a></li>
+                <li><a href="trainers.html">Тренеры</a></li>
+                <li><a href="prices.html">Цены</a></li>
+                <li><a href="booking.html">Запись</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Главная</a> / <span>Расписание занятий</span>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">📅 Расписание <span>групповых программ</span></h2>
+            <p class="section-subtitle">Выберите удобный день и запишитесь на тренировку онлайн</p>
+
+            <!-- Фильтры -->
+            <div class="filters">
+                <button class="filter-btn active" data-day="all">Все дни</button>
+                <button class="filter-btn" data-day="Понедельник">Понедельник</button>
+                <button class="filter-btn" data-day="Вторник">Вторник</button>
+                <button class="filter-btn" data-day="Среда">Среда</button>
+                <button class="filter-btn" data-day="Четверг">Четверг</button>
+                <button class="filter-btn" data-day="Пятница">Пятница</button>
+                <button class="filter-btn" data-day="Суббота">Суббота</button>
+                <button class="filter-btn" data-day="Воскресенье">Воскресенье</button>
+                <div class="trainer-filter">
+                    <label><i class="fas fa-user-coach"></i> Тренер:</label>
+                    <select id="trainerSelect">
+                        <option value="all">Все тренеры</option>
+                        <option value="Анна Смирнова">Анна Смирнова</option>
+                        <option value="Дмитрий Волков">Дмитрий Волков</option>
+                        <option value="Елена Морозова">Елена Морозова</option>
+                        <option value="Максим Кравцов">Максим Кравцов</option>
+                        <option value="Кристина Павлова">Кристина Павлова</option>
+                        <option value="Олег Иванов">Олег Иванов</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Таблица расписания -->
+            <div class="schedule-table-wrapper">
+                <table class="schedule-table" id="scheduleTable">
+                    <thead>
+                        <tr><th>Время</th><th>Занятие</th><th>Тренер</th><th>День недели</th><th>Свободно мест</th><th></th></tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                        <!-- Данные подгружаются через JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>FitNes</h4>
+                <p>Фитнес-клуб нового поколения. Мы помогаем достигать целей и менять жизнь к лучшему.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Пушкина, 99</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> hello@fitnes.ru</p>
+            </div>
+            <div class="footer-col">
+                <h4>Режим работы</h4>
+                <p>Пн–Пт: 07:00 – 23:00</p>
+                <p>Сб–Вс: 08:00 – 22:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Быстрая запись</h4>
+                <p><a href="booking.html">Онлайн-запись</a></p>
+                <p><a href="prices.html">Абонементы</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2026 FitNes Фитнес-клуб. Все права защищены.</p>
+        </div>
     </div>
 </footer>
+
 <script>
-    function loadSchedule() {
-        let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
-        const dayFilter = document.getElementById('dayFilter')?.value || '';
-        const trainerFilter = document.getElementById('trainerFilter')?.value.toLowerCase() || '';
-        let filtered = trainings.filter(t => (dayFilter === '' || t.day === dayFilter) && (trainerFilter === '' || t.trainer.toLowerCase().includes(trainerFilter)));
-        const tbody = document.querySelector('#fullSchedule tbody');
-        if(tbody) {
-            tbody.innerHTML = filtered.map(t => `<tr><td>${t.day}</td><td>${t.time}</td><td>${t.activity}</td><td>${t.trainer}</td><td>${t.spots}</td><td><button class="btn-small" onclick="bookNow(${t.id})">Запись</button></td></tr>`).join('');
+    // --- БАЗА ДАННЫХ РАСПИСАНИЯ (имитация) ---
+    const scheduleData = [
+        { id: 1, day: "Понедельник", time: "09:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 12 },
+        { id: 2, day: "Понедельник", time: "11:00", activity: "Йога", trainer: "Анна Смирнова", spots: 8 },
+        { id: 3, day: "Понедельник", time: "18:30", activity: "Стретчинг", trainer: "Елена Морозова", spots: 15 },
+        { id: 4, day: "Вторник", time: "10:00", activity: "Пилатес", trainer: "Анна Смирнова", spots: 10 },
+        { id: 5, day: "Вторник", time: "19:00", activity: "Zumba", trainer: "Кристина Павлова", spots: 20 },
+        { id: 6, day: "Среда", time: "09:00", activity: "Бокс", trainer: "Максим Кравцов", spots: 6 },
+        { id: 7, day: "Среда", time: "12:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 14 },
+        { id: 8, day: "Среда", time: "20:00", activity: "Йога", trainer: "Анна Смирнова", spots: 10 },
+        { id: 9, day: "Четверг", time: "10:00", activity: "Танцы", trainer: "Олег Иванов", spots: 18 },
+        { id: 10, day: "Четверг", time: "18:00", activity: "Пилатес", trainer: "Елена Морозова", spots: 12 },
+        { id: 11, day: "Пятница", time: "11:00", activity: "Стретчинг", trainer: "Елена Морозова", spots: 16 },
+        { id: 12, day: "Пятница", time: "17:00", activity: "Кроссфит", trainer: "Дмитрий Волков", spots: 9 },
+        { id: 13, day: "Суббота", time: "10:00", activity: "Бокс", trainer: "Максим Кравцов", spots: 7 },
+        { id: 14, day: "Суббота", time: "12:00", activity: "Zumba", trainer: "Кристина Павлова", spots: 22 },
+        { id: 15, day: "Воскресенье", time: "11:00", activity: "Йога", trainer: "Анна Смирнова", spots: 11 },
+        { id: 16, day: "Воскресенье", time: "15:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 13 }
+    ];
+
+    // Функция отрисовки расписания с учётом фильтров
+    function renderSchedule() {
+        const activeDay = document.querySelector('.filter-btn.active')?.getAttribute('data-day') || 'all';
+        const selectedTrainer = document.getElementById('trainerSelect').value;
+
+        let filtered = [...scheduleData];
+
+        if (activeDay !== 'all') {
+            filtered = filtered.filter(item => item.day === activeDay);
+        }
+        if (selectedTrainer !== 'all') {
+            filtered = filtered.filter(item => item.trainer === selectedTrainer);
+        }
+
+        const tbody = document.getElementById('scheduleBody');
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="empty-state">😕 Нет занятий, соответствующих фильтрам. Измените параметры.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(item => `
+            <tr>
+                <td><span class="badge-time">${item.time}</span></td>
+                <td><strong>${item.activity}</strong></td>
+                <td class="trainer-name"><i class="fas fa-user-circle" style="color:#f97316"></i> ${item.trainer}</td>
+                <td>${item.day}</td>
+                <td><span class="spots">${item.spots} мест</span></td>
+                <td><button class="btn-book" data-id="${item.id}" data-name="${item.activity} - ${item.time} (${item.day})">Записаться</button></td>
+            </tr>
+        `).join('');
+
+        // Добавляем обработчики для кнопок записи
+        document.querySelectorAll('.btn-book').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const trainingId = btn.getAttribute('data-id');
+                const trainingName = btn.getAttribute('data-name');
+                // Сохраняем в localStorage выбранное занятие для страницы booking
+                localStorage.setItem('prebookTraining', JSON.stringify({
+                    id: trainingId,
+                    name: trainingName
+                }));
+                window.location.href = 'booking.html';
+            });
+        });
+    }
+
+    // Переключение активного фильтра дней
+    function initFilters() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderSchedule();
+            });
+        });
+        const trainerSelect = document.getElementById('trainerSelect');
+        if (trainerSelect) {
+            trainerSelect.addEventListener('change', renderSchedule);
         }
     }
-    window.bookNow = function(id) {
-        localStorage.setItem('prebookId', id);
-        window.location.href = 'booking.html';
-    };
-    document.getElementById('dayFilter')?.addEventListener('change', loadSchedule);
-    document.getElementById('trainerFilter')?.addEventListener('input', loadSchedule);
-    loadSchedule();
+
+    // Мобильное меню
+    function initMobileMenu() {
+        const toggleBtn = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (toggleBtn && navMenu) {
+            toggleBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('open');
+            });
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navMenu.classList.remove('open'));
+            });
+        }
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+        initFilters();
+        renderSchedule();
+        initMobileMenu();
+    });
 </script>
 </body>
 </html>
