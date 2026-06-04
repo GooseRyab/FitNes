@@ -1,52 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Панель администратора</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter;background:#eef2f5}.container{max-width:1200px;margin:0 auto;padding:30px 20px}.admin-card{background:white;border-radius:32px;padding:28px;margin-bottom:32px;box-shadow:0 8px 20px rgba(0,0,0,0.05)}h2{margin-bottom:20px}table{width:100%;border-collapse:collapse}th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left}.delete-btn{background:#dc2626;color:white;border:none;padding:4px 12px;border-radius:30px;cursor:pointer}.login-box{max-width:400px;margin:100px auto;background:white;padding:32px;border-radius:32px}
-</style></head>
-<body id="adminBody">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель администратора FitZone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="fitnesstyle.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:#eef2f5}
+        .container{max-width:1200px;margin:0 auto;padding:30px 20px}
+        .admin-card{background:white;border-radius:32px;padding:28px;margin-bottom:32px;box-shadow:0 8px 20px rgba(0,0,0,0.05)}
+        h2{margin-bottom:20px;color:#0b1a2e}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}
+        .delete-btn{background:#dc2626;color:white;border:none;padding:6px 14px;border-radius:30px;cursor:pointer;font-size:0.8rem;margin:2px}
+        .delete-btn:hover{background:#b91c1c}
+        .login-overlay{max-width:400px;margin:80px auto;background:white;padding:32px;border-radius:32px;text-align:center;box-shadow:0 20px 30px rgba(0,0,0,0.1)}
+        .login-overlay input{padding:12px;width:100%;margin:16px 0;border-radius:40px;border:1px solid #ccc}
+        .login-overlay button{background:#ff6b3d;color:white;border:none;padding:12px;width:100%;border-radius:40px;font-weight:bold;cursor:pointer}
+        .badge-admin{background:#0b1a2e;color:white;padding:4px 12px;border-radius:20px;font-size:0.7rem;display:inline-block;margin-bottom:16px}
+        a{color:#ff6b3d;text-decoration:none}
+        hr{margin:20px 0}
+    </style>
+</head>
+<body>
+<div id="app-root"></div>
+
 <script>
-    let logged = sessionStorage.getItem('adminAuth');
-    if(!logged) {
-        const pwd = prompt("Введите пароль администратора:");
-        if(pwd === "admin123") { sessionStorage.setItem('adminAuth','true'); location.reload(); }
-        else { document.body.innerHTML = '<div style="text-align:center;margin-top:100px"><h2>Доступ запрещен</h2><a href="index.html">На главную</a></div>'; }
+    // Функция для отрисовки админ-панели (вызывается после успешного входа)
+    function renderAdminPanel() {
+        // Получаем данные из localStorage
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
+
+        const html = `
+            <div class="container">
+                <div class="admin-card">
+                    <h2><i class="fas fa-tachometer-alt"></i> Управление заявками на тренировки</h2>
+                    ${bookings.length === 0 ? '<p>📭 Нет заявок</p>' : `
+                        <table>
+                            <thead><tr><th>ID</th><th>Клиент</th><th>Занятие</th><th>Телефон</th><th>Дата</th><th></th></tr></thead>
+                            <tbody>
+                                ${bookings.map(b => `
+                                    <tr>
+                                        <td>${b.id}</td>
+                                        <td>${escapeHtml(b.clientName)}</td>
+                                        <td>${escapeHtml(b.trainingName)}</td>
+                                        <td>${escapeHtml(b.phone)}</td>
+                                        <td>${escapeHtml(b.date)}</td>
+                                        <td><button class="delete-btn" data-id="${b.id}" data-type="booking">Удалить</button></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `}
+                </div>
+
+                <div class="admin-card">
+                    <h2><i class="fas fa-envelope-open-text"></i> Сообщения обратной связи</h2>
+                    ${contacts.length === 0 ? '<p>✉️ Нет сообщений</p>' : contacts.map(m => `
+                        <div style="border-bottom:1px solid #e2e8f0; padding:12px 0;">
+                            <strong>${escapeHtml(m.name)}</strong> (${escapeHtml(m.email)})<br>
+                            ${escapeHtml(m.message)}<br>
+                            <small style="color:#64748b">${escapeHtml(m.date)}</small>
+                            <button class="delete-btn" data-id="${m.id || m.date + m.email}" data-type="contact" data-email="${escapeHtml(m.email)}" data-date="${escapeHtml(m.date)}">Удалить</button>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="admin-card">
+                    <h2><i class="fas fa-dumbbell"></i> Управление расписанием (демо-удаление)</h2>
+                    ${trainings.length === 0 ? '<p>Нет занятий в расписании</p>' : `
+                        <table>
+                            <thead><tr><th>День</th><th>Время</th><th>Занятие</th><th>Тренер</th><th>Места</th><th></th></tr></thead>
+                            <tbody>
+                                ${trainings.map(t => `
+                                    <tr>
+                                        <td>${escapeHtml(t.day)}</td>
+                                        <td>${escapeHtml(t.time)}</td>
+                                        <td>${escapeHtml(t.activity)}</td>
+                                        <td>${escapeHtml(t.trainer)}</td>
+                                        <td>${t.spots}</td>
+                                        <td><button class="delete-btn" data-id="${t.id}" data-type="training">Удалить</button></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `}
+                    <hr>
+                    <p><small>※ Удаление записей из расписания — только для демонстрации. При перезагрузке страницы первоначальные данные восстановятся (если нет в localStorage).</small></p>
+                </div>
+                <p style="text-align:center; margin-top:20px;"><a href="index.html"><i class="fas fa-home"></i> Вернуться на сайт</a></p>
+            </div>
+        `;
+
+        document.getElementById('app-root').innerHTML = html;
+
+        // Обработчики удаления
+        document.querySelectorAll('.delete-btn[data-type="booking"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                let bookingsNew = JSON.parse(localStorage.getItem('bookings')) || [];
+                bookingsNew = bookingsNew.filter(b => b.id !== id);
+                localStorage.setItem('bookings', JSON.stringify(bookingsNew));
+                renderAdminPanel(); // перерисовка
+            });
+        });
+
+        document.querySelectorAll('.delete-btn[data-type="contact"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const email = btn.getAttribute('data-email');
+                const date = btn.getAttribute('data-date');
+                let contactsNew = JSON.parse(localStorage.getItem('contacts')) || [];
+                contactsNew = contactsNew.filter(c => !(c.email === email && c.date === date));
+                localStorage.setItem('contacts', JSON.stringify(contactsNew));
+                renderAdminPanel();
+            });
+        });
+
+        document.querySelectorAll('.delete-btn[data-type="training"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                let trainingsNew = JSON.parse(localStorage.getItem('trainings')) || [];
+                trainingsNew = trainingsNew.filter(t => t.id !== id);
+                localStorage.setItem('trainings', JSON.stringify(trainingsNew));
+                renderAdminPanel();
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // ---------- Логин ----------
+    const isLogged = sessionStorage.getItem('adminAuth') === 'true';
+    if (!isLogged) {
+        // Показываем форму входа
+        document.getElementById('app-root').innerHTML = `
+            <div class="login-overlay">
+                <i class="fas fa-lock" style="font-size: 48px; color:#ff6b3d;"></i>
+                <h2 style="margin: 16px 0;">Вход администратора</h2>
+                <input type="password" id="adminPass" placeholder="Введите пароль">
+                <button id="loginBtn">Войти</button>
+                <p style="margin-top:20px;"><a href="index.html">← На главную</a></p>
+            </div>
+        `;
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const pwd = document.getElementById('adminPass').value;
+            if (pwd === 'admin123') {
+                sessionStorage.setItem('adminAuth', 'true');
+                renderAdminPanel();
+            } else {
+                alert('Неверный пароль. Доступ запрещен.');
+            }
+        });
     } else {
-        document.write(`
-        <div class="container"><div class="admin-card"><h2><i class="fas fa-tachometer-alt"></i> Управление заявками</h2><div id="bookingsList"></div></div>
-        <div class="admin-card"><h2>Сообщения обратной связи</h2><div id="messagesList"></div></div>
-        <div class="admin-card"><h2>Управление расписанием (демо-удаление)</h2><div id="trainingsList"></div></div>
-        <p style="text-align:center"><a href="index.html">Вернуться на сайт</a></p></div>
-        <script>
-            function renderBookings() {
-                let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-                const container = document.getElementById('bookingsList');
-                if(container) container.innerHTML = bookings.length ? '<table><thead><tr><th>ID</th><th>Клиент</th><th>Занятие</th><th>Телефон</th><th>Дата</th><th></th></tr></thead><tbody>' + 
-                bookings.map(b => `<tr><td>${b.id}</td><td>${b.clientName}</td><td>${b.trainingName}</td><td>${b.phone}</td><td>${b.date}</td><td><button class="delete-btn" onclick="deleteBooking(${b.id})">Удалить</button></td></tr>`).join('') + '</tbody></table>' : '<p>Нет заявок</p>';
-            }
-            window.deleteBooking = function(id) {
-                let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-                bookings = bookings.filter(b => b.id !== id);
-                localStorage.setItem('bookings', JSON.stringify(bookings));
-                renderBookings();
-            };
-            function renderMessages() {
-                let msgs = JSON.parse(localStorage.getItem('contacts')) || [];
-                const container = document.getElementById('messagesList');
-                if(container) container.innerHTML = msgs.length ? msgs.map(m => `<div style="border-bottom:1px solid #ccc;padding:10px;"><strong>${m.name}</strong> (${m.email}): ${m.message}<br><small>${m.date}</small></div>`).join('') : '<p>Нет сообщений</p>';
-            }
-            function renderTrainingsAdmin() {
-                let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
-                const container = document.getElementById('trainingsList');
-                if(container) container.innerHTML = trainings.map(t => `<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">${t.day} ${t.time} — ${t.activity} (тренер ${t.trainer}) <button class="delete-btn" onclick="removeTraining(${t.id})">Удалить</button></div>`).join('');
-            }
-            window.removeTraining = function(id) {
-                let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
-                trainings = trainings.filter(t => t.id !== id);
-                localStorage.setItem('trainings', JSON.stringify(trainings));
-                renderTrainingsAdmin();
-            };
-            renderBookings(); renderMessages(); renderTrainingsAdmin();
-        <\/script>`);
+        renderAdminPanel();
     }
 </script>
 </body>
