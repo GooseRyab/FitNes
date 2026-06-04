@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Тренеры FitNes</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f9fafc}.container{max-width:1280px;margin:0 auto;padding:0 24px}.header{background:#0b1a2e;color:white;padding:20px 0}.header .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}.nav ul{display:flex;gap:28px;list-style:none;flex-wrap:wrap}.nav a{color:#eef2ff;text-decoration:none}.nav a.active,.nav a:hover{color:#ffb74d}.section{padding:60px 0}.section-title{font-size:2rem;text-align:center;margin-bottom:48px}.trainer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}.trainer-card{background:white;border-radius:28px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);text-align:center}.trainer-card img{width:100%;height:280px;object-fit:cover;background:#ccc}.trainer-card h3{margin:20px 0 8px}.trainer-card p{padding:0 16px 20px;color:#4a5568}footer{background:#0b1a2e;color:#b9c8e8;text-align:center;padding:32px 0;margin-top:20px}
+</style></head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>FitNes</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="schedule.html">Расписание</a></li>
+                    <li><a href="trainers.html" class="active">Тренеры</a></li>
+                    <li><a href="prices.html">Цены</a></li>
+                    <li><a href="booking.html">Запись</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+<main class="container section"><h2 class="section-title">👨‍🏫 Наши профессиональные тренеры</h2><div class="trainer-grid" id="trainersList"></div></main>
+<footer>
+    <div class="container">
+        <p>© 2026 FitNes — Р.К.Д. </p>
+        <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Пушкина, 12 | <i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+    </div>
+</footer>
+<script>
+    const trainersData = [
+        { name:"Анна Смирнова", special:"Йога, Пилатес, Стретчинг", exp:"10 лет опыта", img:"https://placehold.co/400x300?text=Анна" },
+        { name:"Дмитрий Волков", special:"Кроссфит, функциональный тренинг", exp:"Мастер спорта", img:"https://placehold.co/400x300?text=Дмитрий" },
+        { name:"Елена Морозова", special:"Пилатес, реабилитация", exp:"Сертифицированный тренер", img:"https://placehold.co/400x300?text=Елена" },
+        { name:"Максим Кравцов", special:"Бокс, единоборства, силовая", exp:"КМС по боксу", img:"https://placehold.co/400x300?text=Максим" }
+    ];
+    const container = document.getElementById('trainersList');
+    if(container) container.innerHTML = trainersData.map(t => `<div class="trainer-card"><img src="${t.img}" alt="${t.name}"><h3>${t.name}</h3><p>${t.special}</p><p><i class="fas fa-star"></i> ${t.exp}</p></div>`).join('');
+</script>
+</body>
+</html>

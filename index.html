@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FitNes - Фитнес клуб | Главная</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fitnesstyle.css">
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <h1>FitNes</h1>
+            <p>Москва | Твой идеальный ритм</p>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="schedule.html">Расписание</a></li>
+                <li><a href="trainers.html">Тренеры</a></li>
+                <li><a href="prices.html">Цены</a></li>
+                <li><a href="booking.html">Запись</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="container">
+            <h2>Достигай целей с FitNes</h2>
+            <p>Современный фитнес-клуб в центре Москвы. Тренажерный зал, групповые программы, персональные тренировки и онлайн-запись 24/7.</p>
+            <a href="booking.html" class="btn">Записаться онлайн</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <div class="card-grid">
+                <div class="card"><i class="fas fa-dumbbell"></i><h3>Новейшее оборудование</h3><p>Залы площадью 800м² с техникой Life Fitness.</p></div>
+                <div class="card"><i class="fas fa-chalkboard-user"></i><h3>Опытные тренеры</h3><p>Мастера спорта, сертифицированные инструкторы.</p></div>
+                <div class="card"><i class="fas fa-calendar-check"></i><h3>Умная запись</h3><p>Бронируй занятия за 2 минуты через сайт.</p></div>
+                <div class="card"><i class="fas fa-heartbeat"></i><h3>Гибкие абонементы</h3><p>Заморозка, семейные тарифы, пробное занятие.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: #eef3fc;">
+        <div class="container">
+            <h2 class="section-title">Актуальное расписание</h2>
+            <div class="table-wrapper">
+                <table id="index-schedule">
+                    <thead><tr><th>Время</th><th>Занятие</th><th>Тренер</th><th>Статус</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div style="text-align: center; margin-top: 32px;">
+                <a href="schedule.html" class="btn btn-outline">Полное расписание</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>© 2026 FitNes — Р.К.Д. </p>
+        <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Пушкина, 12 | <i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+    </div>
+</footer>
+
+<script>
+    if (!localStorage.getItem('trainings')) {
+        const defaultTrainings = [
+            { id: 1, day: "Понедельник", time: "09:00", activity: "Йога", trainer: "Анна Смирнова", spots: 12 },
+            { id: 2, day: "Понедельник", time: "18:00", activity: "CrossFit", trainer: "Дмитрий Волков", spots: 8 },
+            { id: 3, day: "Вторник", time: "10:00", activity: "Пилатес", trainer: "Елена Морозова", spots: 10 },
+            { id: 4, day: "Вторник", time: "19:00", activity: "Танцы", trainer: "Олег Иванов", spots: 15 },
+            { id: 5, day: "Среда", time: "12:00", activity: "Бокс", trainer: "Максим Кравцов", spots: 6 },
+            { id: 6, day: "Среда", time: "20:00", activity: "Zumba", trainer: "Кристина Павлова", spots: 20 },
+            { id: 7, day: "Четверг", time: "08:30", activity: "Стретчинг", trainer: "Анна Смирнова", spots: 14 },
+            { id: 8, day: "Пятница", time: "17:00", activity: "Функциональный тренинг", trainer: "Дмитрий Волков", spots: 9 }
+        ];
+        localStorage.setItem('trainings', JSON.stringify(defaultTrainings));
+    }
+    if (!localStorage.getItem('bookings')) localStorage.setItem('bookings', JSON.stringify([]));
+    if (!localStorage.getItem('contacts')) localStorage.setItem('contacts', JSON.stringify([]));
+
+    function renderIndexSchedule() {
+        const trainings = JSON.parse(localStorage.getItem('trainings'));
+        const tbody = document.querySelector('#index-schedule tbody');
+        if(tbody && trainings) {
+            tbody.innerHTML = trainings.slice(0,3).map(t => `<tr><td>${t.time}</td><td>${t.activity}</td><td>${t.trainer}</td><td><span class="badge">свободно ${t.spots}</span></td></tr>`).join('');
+        }
+    }
+    renderIndexSchedule();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitNes - Расписание занятий</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fitnesstyle.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<header class="header"><div class="container"><div class="logo"><h1>FitNes</h1><p>Москва | Твой идеальный ритм</p></div>
+<nav class="nav"><ul><li><a href="index.html">Главная</a></li><li><a href="schedule.html" class="active">Расписание</a></li><li><a href="trainers.html">Тренеры</a></li><li><a href="prices.html">Цены</a></li><li><a href="booking.html">Запись</a></li><li><a href="contact.html">Контакты</a></li><li><a href="admin.html">Admin</a></li></ul></nav></div></header>
+
+<main class="container section">
+    <h2 class="section-title">🗓️ Расписание групповых занятий</h2>
+    <div class="filter-bar">
+        <select id="dayFilter"><option value="">Все дни</option><option>Понедельник</option><option>Вторник</option><option>Среда</option><option>Четверг</option><option>Пятница</option></select>
+        <input type="text" id="trainerFilter" placeholder="Фильтр по тренеру">
+    </div>
+    <div class="table-wrapper">
+        <table id="fullSchedule"><thead><tr><th>День</th><th>Время</th><th>Занятие</th><th>Тренер</th><th>Места</th><th></th></tr></thead><tbody></tbody></table>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <p>© 2026 FitNes — Р.К.Д. </p>
+        <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Пушкина, 12 | <i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+    </div>
+</footer>
+<script>
+    function loadSchedule() {
+        let trainings = JSON.parse(localStorage.getItem('trainings')) || [];
+        const dayFilter = document.getElementById('dayFilter')?.value || '';
+        const trainerFilter = document.getElementById('trainerFilter')?.value.toLowerCase() || '';
+        let filtered = trainings.filter(t => (dayFilter === '' || t.day === dayFilter) && (trainerFilter === '' || t.trainer.toLowerCase().includes(trainerFilter)));
+        const tbody = document.querySelector('#fullSchedule tbody');
+        if(tbody) {
+            tbody.innerHTML = filtered.map(t => `<tr><td>${t.day}</td><td>${t.time}</td><td>${t.activity}</td><td>${t.trainer}</td><td>${t.spots}</td><td><button class="btn-small" onclick="bookNow(${t.id})">Запись</button></td></tr>`).join('');
+        }
+    }
+    window.bookNow = function(id) {
+        localStorage.setItem('prebookId', id);
+        window.location.href = 'booking.html';
+    };
+    document.getElementById('dayFilter')?.addEventListener('change', loadSchedule);
+    document.getElementById('trainerFilter')?.addEventListener('input', loadSchedule);
+    loadSchedule();
+</script>
+</body>
+</html>
