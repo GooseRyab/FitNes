@@ -1,40 +1,547 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Запись на тренировку</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FitNes – Онлайн-запись</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="fitnesstyle.css">
     <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter;background:#f9fafc}.container{max-width:800px;margin:0 auto;padding:30px 20px}.card{background:white;border-radius:32px;padding:32px;box-shadow:0 20px 35px rgba(0,0,0,0.05)}h2{margin-bottom:24px}.form-group{margin-bottom:20px}label{font-weight:600;display:block;margin-bottom:8px}input,select{width:100%;padding:14px;border-radius:30px;border:1px solid #ccd7e6}.btn-primary{background:#ff6b3d;width:100%;padding:14px;border:none;border-radius:40px;color:white;font-weight:bold;font-size:1.1rem;cursor:pointer}.btn-primary:hover{background:#e55a2c}.back-link{display:inline-block;margin-top:20px}
-</style></head>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка */
+        .header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background-color: rgba(255, 255, 255, 0.96);
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 24px;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0f172a;
+        }
+        .logo span {
+            color: #f97316;
+        }
+        .logo p {
+            font-size: 0.75rem;
+            color: #475569;
+        }
+        .nav ul {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav a:hover, .nav a.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f97316;
+        }
+
+        .breadcrumb {
+            margin: 24px 0 16px;
+            font-size: 0.9rem;
+        }
+        .breadcrumb a {
+            color: #f97316;
+            text-decoration: none;
+        }
+
+        /* Секция формы */
+        .section {
+            padding: 40px 0 80px;
+        }
+        .booking-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+        .booking-header {
+            background: #0f172a;
+            color: white;
+            padding: 28px 32px;
+            text-align: center;
+        }
+        .booking-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .booking-header p {
+            color: #cbd5e1;
+        }
+        .booking-body {
+            padding: 32px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        label .required {
+            color: #f97316;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: 0.2s;
+            background: #fefefe;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+        }
+        textarea {
+            border-radius: 24px;
+            resize: vertical;
+        }
+        .selected-service {
+            background: #fefaf6;
+            border: 1px solid #fed7aa;
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .selected-service i {
+            font-size: 1.6rem;
+            color: #f97316;
+        }
+        .service-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .service-info p {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        .btn-submit {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-submit:hover {
+            background: #ea580c;
+            transform: translateY(-2px);
+        }
+        .success-message {
+            background: #e6f7ec;
+            color: #1e7b48;
+            padding: 16px;
+            border-radius: 28px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error-message {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 28px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .footer-col p, .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #1e293b;
+        }
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+                transition: 0.3s;
+                z-index: 99;
+                padding: 30px 20px;
+            }
+            .nav.open {
+                left: 0;
+            }
+            .nav ul {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .booking-body {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
 <body>
+
+<header class="header">
     <div class="container">
-        <div class="card"><h2><i class="fas fa-calendar-plus"></i> Онлайн-запись</h2>
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label>Выберите занятие *</label>
-                    <select id="trainingSelect" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Ваше имя *</label>
-                    <input type="text" id="clientName" required placeholder="Иван Иванов">
-                </div>
-                <div class="form-group">
-                    <label>Телефон *</label>
-                    <input type="tel" id="clientPhone" required placeholder="+7 999 123 45 67">
-                </div>
-                <div class="form-group">
-                    <label>Email (по желанию)</label>
-                    <input type="email" id="clientEmail" placeholder="mail@example.com">
-                </div>
-                <button type="submit" class="btn-primary">Отправить заявку</button>
-            </form>
-            <div id="msg"></div><a href="schedule.html" class="back-link">← Вернуться к расписанию</a>
+        <div class="logo">
+            <h1>Fit<span>Nes</span></h1>
+            <p>Твой идеальный ритм</p>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Меню"><i class="fas fa-bars"></i></button>
+        <nav class="nav" id="navMenu">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="schedule.html">Расписание</a></li>
+                <li><a href="trainers.html">Тренеры</a></li>
+                <li><a href="prices.html">Цены</a></li>
+                <li><a href="booking.html" class="active">Запись</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Главная</a> / <span>Онлайн-запись</span>
         </div>
     </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-header">
+                    <h2><i class="fas fa-calendar-check"></i> Запись на тренировку</h2>
+                    <p>Заполните форму, и наш администратор свяжется с вами для подтверждения</p>
+                </div>
+                <div class="booking-body">
+                    <!-- Блок с предварительно выбранной услугой -->
+                    <div id="selectedServiceBlock" class="selected-service" style="display: none;">
+                        <i class="fas fa-dumbbell"></i>
+                        <div class="service-info">
+                            <h4>Выбранная услуга</h4>
+                            <p id="selectedServiceText">-</p>
+                        </div>
+                    </div>
+
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label>Выберите занятие или услугу <span class="required">*</span></label>
+                            <select id="serviceSelect" required>
+                                <option value="">-- Выберите из списка --</option>
+                                <option value="Функциональный тренинг (групповой)">Функциональный тренинг (групповой)</option>
+                                <option value="Йога / Стретчинг">Йога / Стретчинг</option>
+                                <option value="Бокс / Единоборства">Бокс / Единоборства</option>
+                                <option value="Zumba / Танцы">Zumba / Танцы</option>
+                                <option value="Персональная тренировка 60 мин">Персональная тренировка 60 мин</option>
+                                <option value="Пробное занятие (бесплатно)">Пробное занятие (бесплатно)</option>
+                                <option value="Абонемент 1 месяц безлимит">Абонемент 1 месяц безлимит</option>
+                                <option value="Абонемент 3 месяца Best">Абонемент 3 месяца Best</option>
+                                <option value="Годовой абонемент Fit">Годовой абонемент Fit</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ваше имя <span class="required">*</span></label>
+                            <input type="text" id="clientName" placeholder="Иван Петров" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Телефон <span class="required">*</span></label>
+                            <input type="tel" id="clientPhone" placeholder="+7 (999) 123-45-67" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" id="clientEmail" placeholder="ivan@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Комментарий (пожелания, удобное время)</label>
+                            <textarea id="comment" rows="3" placeholder="Напишите, если хотите уточнить время или задать вопрос..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Отправить заявку <i class="fas fa-arrow-right"></i></button>
+                        <div id="formMessage"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>FitNes</h4>
+                <p>Фитнес-клуб нового поколения. Мы помогаем достигать целей и менять жизнь к лучшему.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Пушкина, 99</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> hello@fitnes.ru</p>
+            </div>
+            <div class="footer-col">
+                <h4>Режим работы</h4>
+                <p>Пн–Пт: 07:00 – 23:00</p>
+                <p>Сб–Вс: 08:00 – 22:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Быстрая навигация</h4>
+                <p><a href="schedule.html">Расписание</a></p>
+                <p><a href="prices.html">Абонементы</a></p>
+                <p><a href="trainers.html">Тренеры</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2026 FitNes Фитнес-клуб. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
 <script>
+    // Мобильное меню
+    function initMobileMenu() {
+        const toggleBtn = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (toggleBtn && navMenu) {
+            toggleBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('open');
+            });
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navMenu.classList.remove('open'));
+            });
+        }
+    }
+
+    // Предзаполнение услуги из localStorage (при переходе с расписания, цен, тренеров)
+    function applyPrebooking() {
+        const prebookingRaw = localStorage.getItem('prebooking');
+        if (prebookingRaw) {
+            try {
+                const prebooking = JSON.parse(prebookingRaw);
+                let serviceValue = '';
+                if (prebooking.type === 'trainer') {
+                    serviceValue = `Персональная тренировка с тренером ${prebooking.name}`;
+                    // добавим в select, если нет такого option, то создадим?
+                    const select = document.getElementById('serviceSelect');
+                    const optionExists = Array.from(select.options).some(opt => opt.value === serviceValue);
+                    if (!optionExists && serviceValue) {
+                        const newOption = document.createElement('option');
+                        newOption.value = serviceValue;
+                        newOption.textContent = serviceValue;
+                        select.appendChild(newOption);
+                    }
+                } else if (prebooking.type === 'price' && prebooking.plan) {
+                    serviceValue = prebooking.plan;
+                } else if (prebooking.type === 'schedule' && prebooking.name) {
+                    serviceValue = prebooking.name;
+                }
+                if (serviceValue) {
+                    const select = document.getElementById('serviceSelect');
+                    if (Array.from(select.options).some(opt => opt.value === serviceValue)) {
+                        select.value = serviceValue;
+                    } else {
+                        // если такого нет, добавим
+                        const newOpt = document.createElement('option');
+                        newOpt.value = serviceValue;
+                        newOpt.textContent = serviceValue;
+                        select.appendChild(newOpt);
+                        select.value = serviceValue;
+                    }
+                    // показать блок с выбранной услугой
+                    const block = document.getElementById('selectedServiceBlock');
+                    const textSpan = document.getElementById('selectedServiceText');
+                    if (block && textSpan) {
+                        textSpan.textContent = serviceValue;
+                        block.style.display = 'flex';
+                    }
+                }
+                // очищаем, чтобы при обновлении страницы не дублировалось
+                localStorage.removeItem('prebooking');
+            } catch(e) { console.warn(e); }
+        }
+        
+        // дополнительно: поддержка prebookTraining из schedule (старый формат)
+        const prebookTrainingRaw = localStorage.getItem('prebookTraining');
+        if (prebookTrainingRaw) {
+            try {
+                const training = JSON.parse(prebookTrainingRaw);
+                if (training && training.name) {
+                    const select = document.getElementById('serviceSelect');
+                    const optExists = Array.from(select.options).some(opt => opt.value === training.name);
+                    if (!optExists) {
+                        const opt = document.createElement('option');
+                        opt.value = training.name;
+                        opt.textContent = training.name;
+                        select.appendChild(opt);
+                    }
+                    select.value = training.name;
+                    const block = document.getElementById('selectedServiceBlock');
+                    if (block) {
+                        document.getElementById('selectedServiceText').textContent = training.name;
+                        block.style.display = 'flex';
+                    }
+                }
+                localStorage.removeItem('prebookTraining');
+            } catch(e) {}
+        }
+    }
+
+    // Обработка отправки формы
+    function initBookingForm() {
+        const form = document.getElementById('bookingForm');
+        if (!form) return;
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const service = document.getElementById('serviceSelect').value;
+            const name = document.getElementById('clientName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            const comment = document.getElementById('comment').value;
+
+            if (!service) {
+                showMessage('Пожалуйста, выберите услугу', 'error');
+                return;
+            }
+            if (!name) {
+                showMessage('Введите ваше имя', 'error');
+                return;
+            }
+            if (!phone) {
+                showMessage('Введите номер телефона', 'error');
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                showMessage('Введите корректный email', 'error');
+                return;
+            }
+
+            // Сохраняем заявку в localStorage (имитация БД)
+            const bookings = JSON.parse(localStorage.getItem('fitnes_bookings') || '[]');
+            const newBooking = {
+                id: Date.now(),
+                service: service,
+                name: name,
+                phone: phone,
+                email: email,
+                comment: comment,
+                date: new Date().toLocaleString('ru-RU')
+            };
+            bookings.push(newBooking);
+            localStorage.setItem('fitnes_bookings', JSON.stringify(bookings));
+
+            // Показать сообщение об успехе и очистить форму
+            showMessage('✅ Заявка успешно отправлена! Администратор свяжется с вами в ближайшее время.', 'success');
+            form.reset();
+            // скрыть блок предвыбора
+            const block = document.getElementById('selectedServiceBlock');
+            if (block) block.style.display = 'none';
+            // дополнительно: можно очистить localStorage prebooking уже почистили ранее
+        });
+    }
+
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('formMessage');
+        if (msgDiv) {
+            msgDiv.innerHTML = `<div class="${type === 'success' ? 'success-message' : 'error-message'}">${msg}</div>`;
+            setTimeout(() => {
+                msgDiv.innerHTML = '';
+            }, 5000);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initMobileMenu();
+   <script>
     const trainings = JSON.parse(localStorage.getItem('trainings')) || [];
     const select = document.getElementById('trainingSelect');
     const prebookId = localStorage.getItem('prebookId');
