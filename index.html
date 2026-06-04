@@ -1,40 +1,538 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitNes — Фитнес-клуб нового поколения</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.16/index.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            400: '#fb923c',
-                            500: '#f97316',
-                            600: '#ea580c',
-                            900: '#7c2d12',
-                        },
-                        dark: {
-                            900: '#0a0a0a',
-                            800: '#171717',
-                            700: '#262626',
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FitNes – Фитнес клуб в Москве</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка */
+        .header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background-color: rgba(255, 255, 255, 0.96);
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 16px 24px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0f172a;
+        }
+        .logo span {
+            color: #f97316;
+        }
+        .logo p {
+            font-size: 0.75rem;
+            color: #475569;
+        }
+
+        /* Навигация */
+        .nav ul {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+        .nav a:hover, .nav a.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+
+        /* Мобильное меню */
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f97316;
+        }
+
+        /* Кнопки */
+        .btn-primary {
+            display: inline-block;
+            background: #f97316;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+        }
+        .btn-primary:hover {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #f97316;
+            color: #f97316;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: #f97316;
+            color: white;
+        }
+
+        /* Hero секция */
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #fff6ed 0%, #ffffff 100%);
+        }
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+        .hero-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: #0f172a;
+        }
+        .hero-highlight {
+            color: #f97316;
+        }
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #334155;
+            margin-bottom: 32px;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+        }
+        .stat h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #f97316;
+        }
+        .hero-image img {
+            width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+        }
+
+        /* Секции */
+        .section {
+            padding: 70px 0;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+            color: #0f172a;
+        }
+        .section-title span {
+            color: #f97316;
+        }
+
+        /* Карточки преимуществ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 28px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.03);
+            transition: 0.2s;
+            border: 1px solid #f1f5f9;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #fed7aa;
+            box-shadow: 0 25px 35px -12px rgba(249,115,22,0.1);
+        }
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #f97316;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 {
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+
+        /* Расписание (краткий список) */
+        .schedule-preview {
+            background: #fefaf6;
+            border-radius: 32px;
+            padding: 32px;
+        }
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #fee2d6;
+        }
+        .schedule-item:last-child {
+            border: none;
+        }
+        .schedule-time {
+            font-weight: 700;
+            background: #fff0e6;
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: #f97316;
+        }
+        .btn-link {
+            color: #f97316;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Тренеры (быстрый взгляд) */
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+        }
+        .trainer-card {
+            text-align: center;
+            background: white;
+            border-radius: 28px;
+            padding: 24px 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            transition: 0.2s;
+            border: 1px solid #f1f5f9;
+        }
+        .trainer-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 16px;
+            background: #f1f5f9;
+        }
+        .trainer-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+        .trainer-card p {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        /* CTA */
+        .cta {
+            background: #0f172a;
+            color: white;
+            border-radius: 48px;
+            margin: 20px 0;
+        }
+        .cta .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding: 48px 32px;
+        }
+        .cta h3 {
+            font-size: 1.8rem;
+        }
+        .cta .btn-primary {
+            background: #f97316;
+            color: white;
+        }
+
+        /* Подвал */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 24px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        .footer-col p, .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        .social i {
+            font-size: 1.5rem;
+            margin-right: 16px;
+            color: #f97316;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #1e293b;
+        }
+
+        @media (max-width: 900px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+                transition: 0.3s;
+                z-index: 99;
+                padding: 30px 20px;
+            }
+            .nav.open {
+                left: 0;
+            }
+            .nav ul {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .nav a {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
             }
         }
-    </script>
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <h1>Fit<span>Nes</span></h1>
+            <p>Твой идеальный ритм</p>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Меню"><i class="fas fa-bars"></i></button>
+        <nav class="nav" id="navMenu">
+            <ul>
+                <li><a href="index.html" class="active">Главная</a></li>
+                <li><a href="schedule.html">Расписание</a></li>
+                <li><a href="trainers.html">Тренеры</a></li>
+                <li><a href="prices.html">Цены</a></li>
+                <li><a href="booking.html">Запись</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <!-- Hero секция -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Стань сильнее вместе с <span class="hero-highlight">FitNes</span></h2>
+                <p>Современный фитнес-клуб в центре Москвы. Тренажёрный зал, групповые программы, персональный тренинг и уютная атмосфера.</p>
+                <a href="booking.html" class="btn-primary">Пробная тренировка</a>
+                <div class="hero-stats">
+                    <div class="stat"><h3>25+</h3><p>групповых занятий</p></div>
+                    <div class="stat"><h3>8</h3><p>сертифицированных тренеров</p></div>
+                    <div class="stat"><h3>800м²</h3><p>комфортного пространства</p></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://placehold.co/600x450/e2e8f0/f97316?text=FitNes+Gym" alt="FitNes фитнес зал">
+            </div>
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Почему <span>FitNes</span>?</h2>
+            <div class="features-grid">
+                <div class="feature-card"><i class="fas fa-dumbbell"></i><h3>Новейшее оборудование</h3><p>Техника премиум-класса для безопасных и эффективных тренировок.</p></div>
+                <div class="feature-card"><i class="fas fa-chalkboard-user"></i><h3>Опытные тренеры</h3><p>Индивидуальный подход, мастера спорта и международные сертификаты.</p></div>
+                <div class="feature-card"><i class="fas fa-calendar-check"></i><h3>Удобная онлайн-запись</h3><p>Бронируй занятия за пару минут, без звонков и очередей.</p></div>
+                <div class="feature-card"><i class="fas fa-heartbeat"></i><h3>Гибкие абонементы</h3><p>Заморозка, семейные тарифы и приятные акции для новичков.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Расписание на сегодня / ближайшие -->
+    <section class="section" style="background: #fefaf6;">
+        <div class="container">
+            <h2 class="section-title">📅 Расписание <span>сегодня</span></h2>
+            <div class="schedule-preview">
+                <div class="schedule-item"><span class="schedule-time">09:00</span><span>🔥 Функциональный тренинг</span><span>Анна С.</span><a href="schedule.html" class="btn-link">Запись →</a></div>
+                <div class="schedule-item"><span class="schedule-time">11:30</span><span>🧘‍♀️ Йога / Стретчинг</span><span>Елена М.</span><a href="schedule.html" class="btn-link">Запись →</a></div>
+                <div class="schedule-item"><span class="schedule-time">17:00</span><span>🥊 Бокс и единоборства</span><span>Максим К.</span><a href="schedule.html" class="btn-link">Запись →</a></div>
+                <div class="schedule-item"><span class="schedule-time">19:30</span><span>💃 Zumba / Танцы</span><span>Кристина П.</span><a href="schedule.html" class="btn-link">Запись →</a></div>
+                <div style="margin-top: 20px; text-align: center;"><a href="schedule.html" class="btn-outline btn-primary" style="background:transparent;">Смотреть полное расписание</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Быстрый взгляд на тренеров -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Наши <span>тренеры</span></h2>
+            <div class="trainers-grid">
+                <div class="trainer-card"><img src="https://placehold.co/200x200/e2e8f0/f97316?text=Анна" alt="Анна"><h4>Анна Смирнова</h4><p>Йога / Пилатес</p></div>
+                <div class="trainer-card"><img src="https://placehold.co/200x200/e2e8f0/f97316?text=Дмитрий" alt="Дмитрий"><h4>Дмитрий Волков</h4><p>Кроссфит / функционал</p></div>
+                <div class="trainer-card"><img src="https://placehold.co/200x200/e2e8f0/f97316?text=Елена" alt="Елена"><h4>Елена Морозова</h4><p>Стретчинг / LPG</p></div>
+                <div class="trainer-card"><img src="https://placehold.co/200x200/e2e8f0/f97316?text=Максим" alt="Максим"><h4>Максим Кравцов</h4><p>Бокс / Единоборства</p></div>
+            </div>
+            <div style="text-align: center; margin-top: 32px;"><a href="trainers.html" class="btn-outline btn-primary">Все тренеры →</a></div>
+        </div>
+    </section>
+
+    <!-- Цены и абонементы (кратко) -->
+    <section class="section" style="background: #fff6ed;">
+        <div class="container">
+            <h2 class="section-title">Выбери свой <span>абонемент</span></h2>
+            <div class="features-grid">
+                <div class="feature-card"><i class="fas fa-calendar-week"></i><h3>Разовое занятие</h3><p>900 ₽</p><a href="prices.html" class="btn-outline btn-primary" style="margin-top:12px; display:inline-block;">Подробнее</a></div>
+                <div class="feature-card"><i class="fas fa-calendar-alt"></i><h3>1 месяц безлимит</h3><p>4 500 ₽</p><a href="prices.html" class="btn-outline btn-primary" style="margin-top:12px; display:inline-block;">Выбрать</a></div>
+                <div class="feature-card"><i class="fas fa-crown"></i><h3>3 месяца (Premium)</h3><p>11 500 ₽</p><a href="prices.html" class="btn-outline btn-primary" style="margin-top:12px; display:inline-block;">Экономия</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA блок с записью -->
+    <section class="section">
+        <div class="container cta">
+            <div class="container" style="padding: 0;">
+                <h3>Готов начать?</h3>
+                <p>Запишись на пробное занятие и получи скидку 20% на первый месяц</p>
+                <a href="booking.html" class="btn-primary">Записаться онлайн →</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Подвал -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>FitNes</h4>
+                <p>Фитнес-клуб нового поколения. Мы помогаем достигать целей и менять жизнь к лучшему.</p>
+                <div class="social">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-vk"></i>
+                    <i class="fab fa-telegram"></i>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Пушкина, 99</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> hello@fitnes.ru</p>
+            </div>
+            <div class="footer-col">
+                <h4>Режим работы</h4>
+                <p>Пн–Пт: 07:00 – 23:00</p>
+                <p>Сб–Вс: 08:00 – 22:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Меню</h4>
+                <p><a href="schedule.html">Расписание</a></p>
+                <p><a href="trainers.html">Тренеры</a></p>
+                <p><a href="prices.html">Цены</a></p>
+                <p><a href="booking.html">Онлайн-запись</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2026 FitNes Фитнес-клуб. Все права защищены. Дипломный проект.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JS для мобильного меню -->
+<script>
+    const toggleBtn = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    if (toggleBtn && navMenu) {
+        toggleBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+        });
+        // Закрыть меню при клике на ссылку
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('open');
+            });
+        });
+    }
+    // Можно добавить простую анимацию приветствия или уведомление
+    console.log("FitNes — главная страница загружена");
+</script>
+</body>
+</html>    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
